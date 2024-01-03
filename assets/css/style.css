@@ -1,3 +1,11 @@
+:root {
+    --powder-blue: #A7BED3;
+    --light-blue: #C6E2E9;
+    --cream: #F1FFC4;
+    --apricot: #FFCAAF;
+    --tan: #DAB894;
+}
+
 body { /* Create Dot background, from https://codepen.io/edmundojr/pen/xOYJGw */
     --dot-bg: white;
     --dot-color: gray;
@@ -8,4 +16,13 @@ body { /* Create Dot background, from https://codepen.io/edmundojr/pen/xOYJGw */
         linear-gradient(90deg, var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
         linear-gradient(var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
         var(--dot-color);
-  }
+
+    /* Reset some of the browser settings */
+    margin: 0;
+    padding: 0;
+}
+
+h1,h2,h3,h4,h5,h6 { /* Reset margin/padding on all H elements */
+    margin: 0;
+    padding: 0;
+}
