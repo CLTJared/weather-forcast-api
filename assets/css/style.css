@@ -1,9 +1,5 @@
 :root {
-    --powder-blue: #A7BED3;
-    --light-blue: #C6E2E9;
-    --cream: #F1FFC4;
-    --apricot: #FFCAAF;
-    --tan: #DAB894;
+    --header-color: black;
 }
 
 body { /* Create Dot background, from https://codepen.io/edmundojr/pen/xOYJGw */
@@ -25,4 +21,18 @@ body { /* Create Dot background, from https://codepen.io/edmundojr/pen/xOYJGw */
 h1,h2,h3,h4,h5,h6 { /* Reset margin/padding on all H elements */
     margin: 0;
     padding: 0;
+    color: var(--header-color);
+}
+
+ul {
+    width: fit-content;
+    list-style-type: none;
+}
+
+li {
+    background-color: white;
+    padding: .2rem;
+    margin: .2rem;
+    border: 1px black solid;
+    border-radius: .5rem .5rem;
 }

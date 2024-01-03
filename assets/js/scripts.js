@@ -1,6 +1,7 @@
 /*  API Key: 9b3845b57607784634ed605cf72e7f06
     5-Day Forcast: https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=9b3845b57607784634ed605cf72e7f06
     Ex: https://api.openweathermap.org/data/2.5/forecast?lat=35.1149&lon=-80.705&appid=9b3845b57607784634ed605cf72e7f06
+    Ex2: https://pro.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&appid=9b3845b57607784634ed605cf72e7f06
         {
         "cod": "200",
         "message": 0,
@@ -50,9 +51,9 @@ const areaForecast = document.getElementById('weather-forecast');
 
 // Make a GET request using fetch
 function getForecast(lat, lon) {
-    const apiForcast = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=9b3845b57607784634ed605cf72e7f06';
+    const apiForecast = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=9b3845b57607784634ed605cf72e7f06';
 
-    fetch(apiForcast)
+    fetch(apiForecast)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok.');
@@ -62,18 +63,22 @@ function getForecast(lat, lon) {
     .then(data => {
       console.log('Fetch Data:', data);
       
+        if(!data) { return 0; }
 
-      // Fun with Data
-            let pElement = document.createElement('p');
+        // Fun with Data
             let weatherList = data.list;
 
             console.log(weatherList);
 
+            let weatherInfo; 
             weatherList.forEach(element => {
-                pElement.textContent = element.main.feels_like;
-                pElement.setAttribute('name','location')
-                areaForecast.appendChild(pElement);
+                let liElement = document.createElement('li');
+                weatherInfo = element.main.temp + ' - ' + element.weather[0].description;
+                liElement.textContent = weatherInfo;
+                liElement.setAttribute('name','location')
+                areaForecast.appendChild(liElement);
             })
+
 
     })
     .catch(error => {
