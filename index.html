@@ -13,20 +13,17 @@
 
     <main>
         <section>
-            Section - Forcast Information
-            <div>
-                <div id="weather-current">
-                    
-                </div>
-                <ul id="weather-forecast">
-
-                </ul>
+            <div id="weather-current">
+                <!-- Current Weather will be displayed here -->
+            </div>
+            <div id="weather-forecast">
+                <!-- 5 Day Forecast will be displayed here -->
             </div>
         </section>  
         <aside>
             <form id="city-form">
                 <input id="city-lookup" type="text" placeholder="City Name" />
-                <button id="city-search">Lookup Forcast</button>
+                <button id="city-search">Lookup Weather</button>
             </form>
 
             <ul id="search-history">
@@ -39,6 +36,7 @@
         Footer
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="./assets/js/scripts.js"></script>
 </body>
 </html>

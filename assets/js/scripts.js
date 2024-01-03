@@ -56,8 +56,6 @@ const areaCurrent = document.getElementById('weather-current');
 
 // gets the forecast of a specific latitude and longitude
 function getForecast(userSearch) {
-    event.preventDefault();
-
     if (!userSearch) { console.log('getForecast:', 'No lat or long'); return; }
 
     fetch(apiForecast + userSearch + apiKey)
@@ -84,13 +82,31 @@ function getForecast(userSearch) {
                 console.log(timeCheck.includes("12:00:00"));
 
                 if(timeCheck.includes("12:00:00")) {
-                    let liElement = document.createElement('li');
-                    weatherInfo = element.main.temp + ' - ' + element.weather[0].description;
-                    liElement.textContent = weatherInfo;
-                    liElement.setAttribute('name','location')
-                    areaForecast.appendChild(liElement);
+                    let weatherData = {
+                        header: dayjs(element.dt_txt).format('MM-DD-YYYY'),
+                        temp: element.main.temp + ' °F',
+                        wind: element.wind.speed + ' MPH',
+                        humidity: element.main.humidity + '%'
+                    };
+            
+                    let ulElement = document.createElement('ul')
+                    for (const key in weatherData) {
+                        let liElement = document.createElement('li');
+                        liElement.textContent = `${weatherData[key]}`;
+                        ulElement.appendChild(liElement);
+                    }
+                    areaForecast.appendChild(ulElement);
+
+                    // let liElement = document.createElement('li');
+                    // weatherInfo = dayjs(element.dt_txt).format('MM-DD-YYYY') + ' - ' + element.main.temp + ' - ' + element.wind.speed + ' - ' + element.main.humidity
+                    // liElement.textContent = weatherInfo;
+                    // liElement.setAttribute('name','location')
+                    // areaForecast.appendChild(liElement);
                 }
             })
+
+
+
     })
     .catch(error => {
       console.error('Fetch Error:', error);
@@ -100,8 +116,7 @@ function getForecast(userSearch) {
     return;
 }
 
-function getCurrent() {
-    userSearch = event.srcElement[0].value;
+function getCurrent(userSearch) {
     if (!userSearch) { console.log('getForecast:', 'No lat or long'); return; }
 
     fetch(apiWeather + userSearch + apiKey)
@@ -112,12 +127,25 @@ function getCurrent() {
       return response.json();
     })
     .then(data => {
-      console.log('Fetch Data:', data);
+      console.log('Current Weather:', data);
       
         if(!data) { return 0; }
         // Fun with Data
-        let weatherList = data.main.temp;
-        areaCurrent.innerHTML = weatherList;
+        let weatherData = {
+            header: dayjs().format('MM-DD-YYYY'),
+            city: data.name,
+            temp: data.main.temp + ' °F',
+            wind: data.wind.speed + ' MPH',
+            humidity: data.main.humidity + '%'
+        };
+
+        areaCurrent.innerHTML = '';
+        for (const key in weatherData) {
+            let pElement = document.createElement('p');
+            pElement.textContent = `${weatherData[key]}`;
+            areaCurrent.appendChild(pElement);
+            areaCurrent.setAttribute('class', 'current');
+        }
 
     })
     .catch(error => {
