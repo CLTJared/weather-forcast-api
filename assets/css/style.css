@@ -75,34 +75,53 @@ button[data-type='past-search'] {
 }
 
 /* weather forcast styling */
+#weather-forecast {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 #weather-forecast div {
-    background-color: white;
+    background-color: lightcyan;
     padding: .2rem .6rem;
     margin: 1rem .25rem;
     border: 1px gray solid;
     border-radius: .5rem .5rem;
-    display: inline-block;
+    box-shadow: .15rem .15rem .3rem black;
+
+    flex: 1 0 auto;
+}
+
+#weather-forecast p, #weather-current p {
+    padding: 0;
+    margin: 0;
+    line-height: 1.25rem;
+    font-size: .8rem;
 }
 
 #weather-forecast p:first-child {
     font-weight: bold;
     text-align: center;
+    padding: .5rem 0;
+    font-size: 1rem;
 }
 
 /* weather current styling */
 #weather-current p:first-child {
     font-weight: bold;
+    padding: .5rem 0;
+    font-size: 1rem;
 }
 
 .current { /* Class gets applied via js to prevent element from showing before data loaded */
-    background-color: white;
-    box-shadow: .3rem .3rem .5rem black;
+    background-color: lightskyblue;
+    box-shadow: .15rem .15rem .3rem black;
     border: 1px gray solid;
     border-radius: .5rem .5rem;
     padding: .5rem;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 899px) {
     /* sets to column reverse to show search first when screen smaller than 925px wide */
     main {
         flex-direction: column-reverse;
