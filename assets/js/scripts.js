@@ -83,18 +83,31 @@ function getForecast(userSearch, history) {
             let timeCheck = element.dt_txt;
 
             if(timeCheck.includes("12:00:00")) { //Gets the values that are at noon/12:00:00
+                
+
+                weatherIcon = 'https://openweathermap.org/img/wn/' + element.weather[0].icon + "@2x.png";
+
                 let weatherData = {
                     header: dayjs(element.dt_txt).format('MM-DD-YYYY'),
+                    icon: weatherIcon,
                     temp: 'Temp: ' + element.main.temp + ' °F',
                     wind: 'Wind: ' + element.wind.speed + ' MPH',
                     humidity: 'Humidity: ' + element.main.humidity + '%'
                 };
-                    console.log('WEATHER ICON:', element.weather[0].main)
+                    
                 let divElement = document.createElement('div')
                 for (const key in weatherData) {
                     let pElement = document.createElement('p');
-                    pElement.textContent = `${weatherData[key]}`;
-                    divElement.appendChild(pElement);
+                    let imgElement = document.createElement('img');
+                    let currData = `${weatherData[key]}`;
+                    if (currData.includes("https")) {
+                        imgElement.setAttribute("src", currData);
+                        divElement.appendChild(imgElement);
+                    } else {
+                        pElement.textContent = currData;
+                        divElement.appendChild(pElement);
+                    }
+                    
                 }
                 areaForecast.appendChild(divElement);
             }
@@ -123,8 +136,11 @@ function getCurrent(userSearch) {
       
         if(!data) { return 0; }
         // Fun with Data
+        let weatherIcon = 'https://openweathermap.org/img/wn/' + data.weather[0].icon + "@2x.png";
+       
         let weatherData = {
             header: data.name + " | " + dayjs().format('MM-DD-YYYY'),
+            icon: weatherIcon,
             temp: 'Temp: ' + data.main.temp + ' °F',
             wind: 'Wind: ' + data.wind.speed + ' MPH',
             humidity: 'Humidity: ' + data.main.humidity + '%'
@@ -133,9 +149,19 @@ function getCurrent(userSearch) {
         areaCurrent.innerHTML = '';
         for (const key in weatherData) {
             let pElement = document.createElement('p');
-            pElement.textContent = `${weatherData[key]}`;
-            areaCurrent.appendChild(pElement);
-            areaCurrent.setAttribute('class', 'current');
+            let imgElement = document.createElement('img');
+            let currData = `${weatherData[key]}`;
+
+            if (currData.includes("https")) {
+                imgElement.setAttribute("src", currData);
+                areaCurrent.appendChild(imgElement);
+                areaCurrent.setAttribute('class', 'current');
+            } else {
+                pElement.textContent = currData;
+                areaCurrent.appendChild(pElement);
+                areaCurrent.setAttribute('class', 'current');
+            }
+            
         }
 
     })
