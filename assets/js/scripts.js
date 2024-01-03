@@ -52,13 +52,12 @@ const apiForecast = 'https://api.openweathermap.org/data/2.5/forecast?units=impe
 // Define document elements
 const areaForecast = document.getElementById('weather-forecast');
 const submitLookup = document.getElementById('city-form');
+const areaCurrent = document.getElementById('weather-current');
 
 // gets the forecast of a specific latitude and longitude
-function getForecast(event) {
+function getForecast(userSearch) {
     event.preventDefault();
-    console.log(event);
 
-    userSearch = event.srcElement[0].value;
     if (!userSearch) { console.log('getForecast:', 'No lat or long'); return; }
 
     fetch(apiForecast + userSearch + apiKey)
@@ -80,13 +79,45 @@ function getForecast(event) {
             let weatherInfo;
             areaForecast.innerHTML = '';
             weatherList.forEach(element => {
-                let liElement = document.createElement('li');
-                weatherInfo = element.main.temp + ' - ' + element.weather[0].description;
-                liElement.textContent = weatherInfo;
-                liElement.setAttribute('name','location')
-                areaForecast.appendChild(liElement);
-            })
+                let timeCheck = element.dt_txt;
+                console.log(timeCheck);
+                console.log(timeCheck.includes("12:00:00"));
 
+                if(timeCheck.includes("12:00:00")) {
+                    let liElement = document.createElement('li');
+                    weatherInfo = element.main.temp + ' - ' + element.weather[0].description;
+                    liElement.textContent = weatherInfo;
+                    liElement.setAttribute('name','location')
+                    areaForecast.appendChild(liElement);
+                }
+            })
+    })
+    .catch(error => {
+      console.error('Fetch Error:', error);
+      return error;
+    });
+
+    return;
+}
+
+function getCurrent() {
+    userSearch = event.srcElement[0].value;
+    if (!userSearch) { console.log('getForecast:', 'No lat or long'); return; }
+
+    fetch(apiWeather + userSearch + apiKey)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Fetch Data:', data);
+      
+        if(!data) { return 0; }
+        // Fun with Data
+        let weatherList = data.main.temp;
+        areaCurrent.innerHTML = weatherList;
 
     })
     .catch(error => {
@@ -97,4 +128,13 @@ function getForecast(event) {
     return;
 }
 
-submitLookup.addEventListener("submit", getForecast);
+function getWeatherData(event) {
+    // Prevent form from refreshing the page
+    event.preventDefault();
+    let search = event.srcElement[0].value;
+
+    getForecast(search);
+    getCurrent(search);
+}
+
+submitLookup.addEventListener("submit", getWeatherData);
