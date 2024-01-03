@@ -14,4 +14,4 @@ Install Command: `git clone git@github.com:CLTJared/weather-forcast-api.git`
 ## Demo
 [Demo](https://cltjared.github.io/weather-forcast-api/)
 
-![Screenshot]()
+![Screenshot](./assets/images/weather-forcast.png)
