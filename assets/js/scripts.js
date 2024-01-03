@@ -40,3 +40,48 @@
             "state": "North Carolina"
         }
 */
+
+// Define defaults for latitude and longitude
+let locLat = 35.1149;
+let locLon = -80.705;
+
+// Define document elements
+const areaForecast = document.getElementById('weather-forecast');
+
+// Make a GET request using fetch
+function getForecast(lat, lon) {
+    const apiForcast = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=9b3845b57607784634ed605cf72e7f06';
+
+    fetch(apiForcast)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Fetch Data:', data);
+      
+
+      // Fun with Data
+            let pElement = document.createElement('p');
+            let weatherList = data.list;
+
+            console.log(weatherList);
+
+            weatherList.forEach(element => {
+                pElement.textContent = element.main.feels_like;
+                pElement.setAttribute('name','location')
+                areaForecast.appendChild(pElement);
+            })
+
+    })
+    .catch(error => {
+      console.error('Fetch Error:', error);
+      return error;
+    });
+
+    return;
+}
+
+getForecast(locLat, locLon);
