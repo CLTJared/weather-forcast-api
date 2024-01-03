@@ -53,9 +53,10 @@ const apiForecast = 'https://api.openweathermap.org/data/2.5/forecast?units=impe
 const areaForecast = document.getElementById('weather-forecast');
 const submitLookup = document.getElementById('city-form');
 const areaCurrent = document.getElementById('weather-current');
+const areaHistory = document.getElementById('search-history');
 
 // gets the forecast of a specific latitude and longitude
-function getForecast(userSearch) {
+function getForecast(userSearch, history) {
     if (!userSearch) { console.log('getForecast:', 'No lat or long'); return; }
 
     fetch(apiForecast + userSearch + apiKey)
@@ -71,6 +72,7 @@ function getForecast(userSearch) {
         if(!data) { return 0; }
         // Fun with Data
             let weatherList = data.list;
+            if(history != false) { historyCreate(userSearch); }
 
             console.log(weatherList);
 
@@ -88,7 +90,7 @@ function getForecast(userSearch) {
                         wind: element.wind.speed + ' MPH',
                         humidity: element.main.humidity + '%'
                     };
-            
+                        console.log('WEATHER ICON:', element.weather[0].main)
                     let ulElement = document.createElement('ul')
                     for (const key in weatherData) {
                         let liElement = document.createElement('li');
@@ -134,9 +136,9 @@ function getCurrent(userSearch) {
         let weatherData = {
             header: dayjs().format('MM-DD-YYYY'),
             city: data.name,
-            temp: data.main.temp + ' °F',
-            wind: data.wind.speed + ' MPH',
-            humidity: data.main.humidity + '%'
+            temp: 'Temp: ' + data.main.temp + ' °F',
+            wind: 'Wind: ' + data.wind.speed + ' MPH',
+            humidity: 'Humidity: ' + data.main.humidity + '%'
         };
 
         areaCurrent.innerHTML = '';
@@ -159,10 +161,29 @@ function getCurrent(userSearch) {
 function getWeatherData(event) {
     // Prevent form from refreshing the page
     event.preventDefault();
+    console.log('Testing:', event.value)
     let search = event.srcElement[0].value;
 
     getForecast(search);
     getCurrent(search);
+
+    submitLookup.reset();
+}
+
+function getHistoryData(search) {
+    getForecast(search, false);
+    getCurrent(search);
+}
+
+function historyCreate(search) {
+    const historyButton = document.createElement('button');
+    historyButton.innerHTML = search;
+    historyButton.setAttribute('class', 'full');
+    historyButton.setAttribute('datatype', 'past-search');
+    historyButton.setAttribute('value', search);
+    historyButton.setAttribute('name', 'past')
+    historyButton.setAttribute('onClick', 'getHistoryData("'+search+'")');
+    areaHistory.appendChild(historyButton);
 }
 
 submitLookup.addEventListener("submit", getWeatherData);

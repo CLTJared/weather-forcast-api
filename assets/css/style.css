@@ -13,6 +13,8 @@ body { /* Create Dot background, from https://codepen.io/edmundojr/pen/xOYJGw */
         linear-gradient(var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
         var(--dot-color);
 
+    font-family: sans-serif;
+
     /* Reset some of the browser settings */
     margin: 0;
     padding: 0;
@@ -26,8 +28,18 @@ header {
 main {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: space-between;
+}
+
+section {
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+aside {
+    margin-top: 1rem;
+    margin-right: 1rem;
 }
 
 h1,h2,h3,h4,h5,h6 { /* Reset margin/padding on all H elements */
@@ -47,7 +59,7 @@ section ul {
     background-color: white;
     padding: .2rem;
     margin: .2rem;
-    border: 1px black solid;
+    border: 1px gray solid;
     border-radius: .5rem .5rem;
     display: inline-block;
 }
@@ -55,12 +67,33 @@ section ul {
 .current {
     background-color: white;
     box-shadow: .3rem .3rem .5rem black;
-    margin-left: 2rem;
-    margin-top: 1rem;
-    border: 1px black solid;
+    border: 1px gray solid;
     border-radius: .5rem .5rem;
+    padding: .5rem;
 }
 
-#weather-current p {
-    padding: .5rem;
+.full {
+    width: 100%;
+}
+
+button {
+    margin-top: .5rem;
+}
+
+button[data-type='search'] {
+    background-color: lightcoral;
+}
+
+button[data-type='past-search'] {
+    background-color: lightslategray;
+}
+
+#weather-forecast li:first-child {
+    font-weight: bold;
+}
+
+@media screen and (max-width: 835px) {
+    main {
+        flex-direction: column-reverse;
+    }
 }

@@ -21,20 +21,17 @@
             </div>
         </section>  
         <aside>
+            <h2>Search for a City:</h2>
             <form id="city-form">
-                <input id="city-lookup" type="text" placeholder="City Name" />
-                <button id="city-search">Lookup Weather</button>
+                <input id="city-lookup" type="text" placeholder="City Name" class="full" />
+                <button data-type="search" id="city-search" class="full">Lookup Weather</button>
+                
+                <div id="search-history">
+                    <!-- Search History -->
+                </div>
             </form>
-
-            <ul id="search-history">
-                <!-- Search History -->
-            </ul>
         </aside>  
     </main>
-
-    <footer>
-        Footer
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="./assets/js/scripts.js"></script>
