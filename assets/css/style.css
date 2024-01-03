@@ -1,0 +1,11 @@
+body { /* Create Dot background, from https://codepen.io/edmundojr/pen/xOYJGw */
+    --dot-bg: white;
+    --dot-color: gray;
+    --dot-size: 1px;
+    --dot-space: 3px;
+
+    background:
+        linear-gradient(90deg, var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
+        linear-gradient(var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
+        var(--dot-color);
+  }
