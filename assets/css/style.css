@@ -25,6 +25,7 @@ header {
     height: 20svh;
 }
 
+/* flex box to have content flow */
 main {
     display: flex;
     flex-direction: row;
@@ -33,13 +34,15 @@ main {
 }
 
 section {
-    margin-top: 1rem;
-    margin-left: 1rem;
+    flex: 1 0 auto;
+    margin: 1rem;
 }
 
 aside {
+    flex: 0 0 200px;
     margin-top: 1rem;
     margin-right: 1rem;
+    margin-left: 1rem;
 }
 
 h1,h2,h3,h4,h5,h6 { /* Reset margin/padding on all H elements */
@@ -52,26 +55,7 @@ input[type="text"] { /* Reset padding handling for input type of text */
     box-sizing: border-box;
 }
 
-/* Styling for weather forcast content */
-section ul {
-    width: fit-content;
-    list-style-type: none;
-    background-color: white;
-    padding: .2rem;
-    margin: .2rem;
-    border: 1px gray solid;
-    border-radius: .5rem .5rem;
-    display: inline-block;
-}
-
-.current {
-    background-color: white;
-    box-shadow: .3rem .3rem .5rem black;
-    border: 1px gray solid;
-    border-radius: .5rem .5rem;
-    padding: .5rem;
-}
-
+/* Resizing of form elements */
 .full {
     width: 100%;
 }
@@ -88,12 +72,37 @@ button[data-type='past-search'] {
     background-color: lightslategray;
 }
 
-#weather-forecast li:first-child {
+/* weather forcast styling */
+#weather-forecast div {
+    background-color: white;
+    padding: .2rem;
+    margin: 1rem .25rem;
+    border: 1px gray solid;
+    border-radius: .5rem .5rem;
+    display: inline-block;
+}
+
+#weather-forecast p:first-child {
     font-weight: bold;
 }
 
-@media screen and (max-width: 835px) {
+/* weather current styling */
+#weather-current p:first-child {
+    font-weight: bold;
+}
+
+.current { /* Class gets applied via js to prevent element from showing before data loaded */
+    background-color: white;
+    box-shadow: .3rem .3rem .5rem black;
+    border: 1px gray solid;
+    border-radius: .5rem .5rem;
+    padding: .5rem;
+}
+
+@media screen and (max-width: 925px) {
+    /* sets to column reverse to show search first when screen smaller than 925px wide */
     main {
         flex-direction: column-reverse;
     }
+
 }

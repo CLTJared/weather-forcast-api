@@ -55,6 +55,9 @@ const submitLookup = document.getElementById('city-form');
 const areaCurrent = document.getElementById('weather-current');
 const areaHistory = document.getElementById('search-history');
 
+// Set variable for project name for read/write functions
+const projectName = 'weather-forecast';
+
 // gets the forecast of a specific latitude and longitude
 function getForecast(userSearch, history) {
     if (!userSearch) { console.log('getForecast:', 'No lat or long'); return; }
@@ -69,46 +72,33 @@ function getForecast(userSearch, history) {
     .then(data => {
       console.log('Fetch Data:', data);
       
-        if(!data) { return 0; }
-        // Fun with Data
-            let weatherList = data.list;
-            if(history != false) { historyCreate(userSearch); }
+        if(!data) { return 0; } //Data sanity check
+        
+        let weatherList = data.list;
+        if(history != false) { historyCreate(userSearch); }
 
-            console.log(weatherList);
+        let weatherInfo;
+        areaForecast.innerHTML = '';
+        weatherList.forEach(element => { //Loops through all of the elements in data.list
+            let timeCheck = element.dt_txt;
 
-            let weatherInfo;
-            areaForecast.innerHTML = '';
-            weatherList.forEach(element => {
-                let timeCheck = element.dt_txt;
-                console.log(timeCheck);
-                console.log(timeCheck.includes("12:00:00"));
-
-                if(timeCheck.includes("12:00:00")) {
-                    let weatherData = {
-                        header: dayjs(element.dt_txt).format('MM-DD-YYYY'),
-                        temp: element.main.temp + ' °F',
-                        wind: element.wind.speed + ' MPH',
-                        humidity: element.main.humidity + '%'
-                    };
-                        console.log('WEATHER ICON:', element.weather[0].main)
-                    let ulElement = document.createElement('ul')
-                    for (const key in weatherData) {
-                        let liElement = document.createElement('li');
-                        liElement.textContent = `${weatherData[key]}`;
-                        ulElement.appendChild(liElement);
-                    }
-                    areaForecast.appendChild(ulElement);
-
-                    // let liElement = document.createElement('li');
-                    // weatherInfo = dayjs(element.dt_txt).format('MM-DD-YYYY') + ' - ' + element.main.temp + ' - ' + element.wind.speed + ' - ' + element.main.humidity
-                    // liElement.textContent = weatherInfo;
-                    // liElement.setAttribute('name','location')
-                    // areaForecast.appendChild(liElement);
+            if(timeCheck.includes("12:00:00")) { //Gets the values that are at noon/12:00:00
+                let weatherData = {
+                    header: dayjs(element.dt_txt).format('MM-DD-YYYY'),
+                    temp: 'Temp: ' + element.main.temp + ' °F',
+                    wind: 'Wind: ' + element.wind.speed + ' MPH',
+                    humidity: 'Humidity: ' + element.main.humidity + '%'
+                };
+                    console.log('WEATHER ICON:', element.weather[0].main)
+                let divElement = document.createElement('div')
+                for (const key in weatherData) {
+                    let pElement = document.createElement('p');
+                    pElement.textContent = `${weatherData[key]}`;
+                    divElement.appendChild(pElement);
                 }
-            })
-
-
-
+                areaForecast.appendChild(divElement);
+            }
+        })
     })
     .catch(error => {
       console.error('Fetch Error:', error);
@@ -134,8 +124,7 @@ function getCurrent(userSearch) {
         if(!data) { return 0; }
         // Fun with Data
         let weatherData = {
-            header: dayjs().format('MM-DD-YYYY'),
-            city: data.name,
+            header: data.name + " | " + dayjs().format('MM-DD-YYYY'),
             temp: 'Temp: ' + data.main.temp + ' °F',
             wind: 'Wind: ' + data.wind.speed + ' MPH',
             humidity: 'Humidity: ' + data.main.humidity + '%'
@@ -175,7 +164,7 @@ function getHistoryData(search) {
     getCurrent(search);
 }
 
-function historyCreate(search) {
+function historyCreate(search, write) {
     const historyButton = document.createElement('button');
     historyButton.innerHTML = search;
     historyButton.setAttribute('class', 'full');
@@ -184,6 +173,47 @@ function historyCreate(search) {
     historyButton.setAttribute('name', 'past')
     historyButton.setAttribute('onClick', 'getHistoryData("'+search+'")');
     areaHistory.appendChild(historyButton);
+
+    //create object to write to local storage key
+    if(write != false) {
+        searchWrite = { city: search };
+        writeLocalStorage(projectName, searchWrite);
+    }
+}
+
+function readLocalStorage(key) {
+    //Function to read the local storage with passed object name
+    let tempStorage = JSON.parse(localStorage.getItem(key));
+    //Debug testing for if it's an object/array
+    console.log("readLocalStorage | Not an Object: " + !tempStorage);
+
+    if(!tempStorage) { tempStorage = []; localStorage.setItem(key, JSON.stringify(tempStorage)); } 
+    console.log("readLocalStorage | " + JSON.stringify(tempStorage));
+    //Function returns the local storage object
+    return tempStorage;
+}
+
+function writeLocalStorage(key, toStoreAsObject) {
+    //Function to write to LocalStorage
+    var currObject = readLocalStorage(key);
+
+    if(typeof toStoreAsObject !== 'object') { console.log("writeLocalStorage: Invalid type submitted."); return }
+    currObject.push(toStoreAsObject)
+
+    console.log('writeLocalStorage | ' + toStoreAsObject);
+    console.log('writeLocalStorage | ' + JSON.stringify(toStoreAsObject));
+
+    localStorage.setItem(key, JSON.stringify(currObject))
+}
+
+function loadHistory() {
+    const cityHistory = readLocalStorage(projectName);
+
+    areaHistory.innerHTML = '';
+    cityHistory.forEach(element => {
+        historyCreate(element.city, false);
+    });
 }
 
 submitLookup.addEventListener("submit", getWeatherData);
+loadHistory();
