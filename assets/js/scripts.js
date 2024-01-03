@@ -58,7 +58,7 @@ const areaHistory = document.getElementById('search-history');
 // Set variable for project name for read/write functions
 const projectName = 'weather-forecast';
 
-// gets the forecast of a specific latitude and longitude
+// gets the forecast of a specific location
 function getForecast(userSearch, history) {
     if (!userSearch) { console.log('getForecast:', 'No lat or long'); return; }
 
@@ -83,10 +83,10 @@ function getForecast(userSearch, history) {
             let timeCheck = element.dt_txt;
 
             if(timeCheck.includes("12:00:00")) { //Gets the values that are at noon/12:00:00
-                
 
                 weatherIcon = 'https://openweathermap.org/img/wn/' + element.weather[0].icon + "@2x.png";
 
+                // Creates object holding the weather information to loop through
                 let weatherData = {
                     header: dayjs(element.dt_txt).format('MM-DD-YYYY'),
                     icon: weatherIcon,
@@ -96,10 +96,13 @@ function getForecast(userSearch, history) {
                 };
                     
                 let divElement = document.createElement('div')
+                // Loops through weatherData object
                 for (const key in weatherData) {
                     let pElement = document.createElement('p');
                     let imgElement = document.createElement('img');
                     let currData = `${weatherData[key]}`;
+
+                    // Checks if the data has https, indicating we need to make it an img, otherwise make it a p
                     if (currData.includes("https")) {
                         imgElement.setAttribute("src", currData);
                         divElement.appendChild(imgElement);
@@ -121,6 +124,7 @@ function getForecast(userSearch, history) {
     return;
 }
 
+// gets the current weather information for searched location
 function getCurrent(userSearch) {
     if (!userSearch) { console.log('getForecast:', 'No lat or long'); return; }
 
@@ -150,8 +154,9 @@ function getCurrent(userSearch) {
         for (const key in weatherData) {
             let pElement = document.createElement('p');
             let imgElement = document.createElement('img');
-            let currData = `${weatherData[key]}`;
+            let currData = `${weatherData[key]}`; // Current array value/data
 
+            // Checks if the data has https, indicating we need to make it an img, otherwise make it a p
             if (currData.includes("https")) {
                 imgElement.setAttribute("src", currData);
                 areaCurrent.appendChild(imgElement);
@@ -173,6 +178,7 @@ function getCurrent(userSearch) {
     return;
 }
 
+// calls the getForcast & getCurrent after making sure form doesn't reset page & resets form elements
 function getWeatherData(event) {
     // Prevent form from refreshing the page
     event.preventDefault();
@@ -182,14 +188,16 @@ function getWeatherData(event) {
     getForecast(search);
     getCurrent(search);
 
-    submitLookup.reset();
+    submitLookup.reset(); // resets form elements to blank/default
 }
 
+// Called when clicking a history button search so that it does not double log
 function getHistoryData(search) {
-    getForecast(search, false);
+    getForecast(search, false); // false flag tells it to not write to local storage
     getCurrent(search);
 }
 
+// Creates the history buttons after a search, called in getForecast
 function historyCreate(search, write) {
     const historyButton = document.createElement('button');
     historyButton.innerHTML = search;
@@ -207,6 +215,7 @@ function historyCreate(search, write) {
     }
 }
 
+// Function for reading local storage
 function readLocalStorage(key) {
     //Function to read the local storage with passed object name
     let tempStorage = JSON.parse(localStorage.getItem(key));
@@ -219,6 +228,7 @@ function readLocalStorage(key) {
     return tempStorage;
 }
 
+// Function for writing to local storage
 function writeLocalStorage(key, toStoreAsObject) {
     //Function to write to LocalStorage
     var currObject = readLocalStorage(key);
@@ -232,6 +242,7 @@ function writeLocalStorage(key, toStoreAsObject) {
     localStorage.setItem(key, JSON.stringify(currObject))
 }
 
+// Function to load history objects on page load
 function loadHistory() {
     const cityHistory = readLocalStorage(projectName);
 
@@ -241,5 +252,8 @@ function loadHistory() {
     });
 }
 
+// Event listener for submit button
 submitLookup.addEventListener("submit", getWeatherData);
+
+// Loads the history on page load from local storage
 loadHistory();

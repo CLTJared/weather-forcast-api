@@ -61,15 +61,18 @@ input[type="text"] { /* Reset padding handling for input type of text */
     width: 100%;
 }
 
+/* styling buttons */
 button {
     margin-top: .5rem;
     padding: .3rem;
 }
 
+/* specific to search */
 button[data-type='search'] {
     background-color: lightcoral;
 }
 
+/* specific to history */
 button[data-type='past-search'] {
     background-color: lightslategray;
 }
@@ -92,6 +95,7 @@ button[data-type='past-search'] {
     flex: 1 0 auto;
 }
 
+/* Default p tag information for forecast and current areas */
 #weather-forecast p, #weather-current p {
     padding: 0;
     margin: 0;
@@ -100,6 +104,7 @@ button[data-type='past-search'] {
     text-align: left;
 }
 
+/* Sets the first p to have special properties like a header */
 #weather-forecast p:first-child {
     font-weight: bold;
     text-align: center;
@@ -107,6 +112,7 @@ button[data-type='past-search'] {
     font-size: 1rem;
 }
 
+/* Resize weather icons provided from OpenWeather to fit site layout */
 #weather-forecast img, #weather-current img {
     width: 50px;
     height: 50px;
