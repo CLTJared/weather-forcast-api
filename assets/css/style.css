@@ -18,18 +18,35 @@ body { /* Create Dot background, from https://codepen.io/edmundojr/pen/xOYJGw */
     padding: 0;
 }
 
+header {
+    background-color: white;
+    height: 20svh;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
 h1,h2,h3,h4,h5,h6 { /* Reset margin/padding on all H elements */
     margin: 0;
     padding: 0;
     color: var(--header-color);
 }
 
-ul {
+input[type="text"] { /* Reset padding handling for input type of text */
+    box-sizing: border-box;
+}
+
+/* Styling for weather forcast content */
+section ul {
     width: fit-content;
     list-style-type: none;
 }
 
-li {
+section li {
     background-color: white;
     padding: .2rem;
     margin: .2rem;

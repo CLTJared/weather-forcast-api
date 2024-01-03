@@ -45,15 +45,23 @@
 // Define defaults for latitude and longitude
 let locLat = 35.1149;
 let locLon = -80.705;
+const apiKey = '&appid=9b3845b57607784634ed605cf72e7f06'
+const apiWeather = 'https://api.openweathermap.org/data/2.5/weather?units=imperial&q='
+const apiForecast = 'https://api.openweathermap.org/data/2.5/forecast?units=imperial&q='
 
 // Define document elements
 const areaForecast = document.getElementById('weather-forecast');
+const submitLookup = document.getElementById('city-form');
 
-// Make a GET request using fetch
-function getForecast(lat, lon) {
-    const apiForecast = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=9b3845b57607784634ed605cf72e7f06';
+// gets the forecast of a specific latitude and longitude
+function getForecast(event) {
+    event.preventDefault();
+    console.log(event);
 
-    fetch(apiForecast)
+    userSearch = event.srcElement[0].value;
+    if (!userSearch) { console.log('getForecast:', 'No lat or long'); return; }
+
+    fetch(apiForecast + userSearch + apiKey)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok.');
@@ -64,13 +72,13 @@ function getForecast(lat, lon) {
       console.log('Fetch Data:', data);
       
         if(!data) { return 0; }
-
         // Fun with Data
             let weatherList = data.list;
 
             console.log(weatherList);
 
-            let weatherInfo; 
+            let weatherInfo;
+            areaForecast.innerHTML = '';
             weatherList.forEach(element => {
                 let liElement = document.createElement('li');
                 weatherInfo = element.main.temp + ' - ' + element.weather[0].description;
@@ -89,4 +97,4 @@ function getForecast(lat, lon) {
     return;
 }
 
-getForecast(locLat, locLon);
+submitLookup.addEventListener("submit", getForecast);
